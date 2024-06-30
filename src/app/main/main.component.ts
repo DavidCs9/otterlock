@@ -17,6 +17,7 @@ export class MainComponent implements OnInit {
   token = signal('');
   passwords: WritableSignal<Password[]> = signal([]);
   copyPasswords: WritableSignal<Password[]> = signal([]);
+  addPasswordDialog!: HTMLDialogElement;
 
   constructor(private passwordsService: PasswordsService) {
     this.token.set(sessionStorage.getItem('token')!);
@@ -25,6 +26,7 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     this.loadingPasswords.set(true);
     this.getPasswords();
+    this.addPasswordDialog = document.querySelector('#addPasswordDialog')!;
   }
 
   async getPasswords() {
@@ -46,8 +48,8 @@ export class MainComponent implements OnInit {
     );
   }
 
-  addPassword() {
-    console.log('add password');
+  openAddPassword() {
+    this.addPasswordDialog.showModal();
   }
 
   deletePassword(id: string) {
@@ -59,6 +61,6 @@ export class MainComponent implements OnInit {
   }
 
   closeDialog() {
-    console.log('close dialog');
+    this.addPasswordDialog.close();
   }
 }

@@ -5,7 +5,7 @@
     <h1 class="font-semibold">List of passwords</h1>
     <button
       class="flex items-center gap-1 rounded-lg border p-1 text-sm text-gray-500 hover:bg-slate-100"
-      (click)="addPassword()"
+      (click)="openAddPassword()"
     >
       <span class="icon-[material-symbols--add]"></span>
       Add
@@ -28,8 +28,6 @@
   </div>
 </div>
 
-<dialog>
-  <ng-container>
-    <app-add-password (close)="closeDialog()" />
-  </ng-container>
+<dialog id="addPasswordDialog" class="w-80 rounded-2xl p-4">
+  <app-add-password (closeDialog)="closeDialog()" />
 </dialog>
