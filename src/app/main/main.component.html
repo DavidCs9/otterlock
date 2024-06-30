@@ -1,1 +1,35 @@
-<p>main works!</p>
+<div
+  class="mx-auto flex w-80 flex-col justify-center rounded-2xl bg-gray-50 p-4 md:w-96"
+>
+  <div class="flex justify-between p-1">
+    <h1 class="font-semibold">List of passwords</h1>
+    <button
+      class="flex items-center gap-1 rounded-lg border p-1 text-sm text-gray-500 hover:bg-slate-100"
+      (click)="addPassword()"
+    >
+      <span class="icon-[material-symbols--add]"></span>
+      Add
+    </button>
+  </div>
+  <input
+    type="text"
+    class="w-full rounded-lg border p-1"
+    placeholder="Search"
+    (keyup)="search($event)"
+  />
+  <div class="p- mt-2 h-96 rounded-lg bg-slate-200">
+    @if (loadingPasswords()) {
+      <div class="grid h-full place-items-center">
+        <img src="../../../assets/loading_pwd.gif" alt="loading" class="h-20" />
+      </div>
+    } @else {
+      <app-passwords [passwords]="passwords()" />
+    }
+  </div>
+</div>
+
+<dialog>
+  <ng-container>
+    <app-add-password (close)="closeDialog()" />
+  </ng-container>
+</dialog>
