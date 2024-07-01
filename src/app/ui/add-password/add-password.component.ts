@@ -34,7 +34,7 @@ export class AddPasswordComponent {
     await this.addPasswordToDB();
     Toastify({
       text: 'Password added',
-      duration: 6000,
+      duration: 4000,
       gravity: 'top',
       position: 'center',
       backgroundColor: 'linear-gradient(to right, #00b09b, #96c93d)',

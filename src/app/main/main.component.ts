@@ -34,11 +34,10 @@ export class MainComponent implements OnInit {
   }
 
   search(event: any) {
-    console.log(this.copyPasswords());
-    const search = event.target.value;
+    const search = event.target.value.toLowerCase(); // Convert search query to lowercase
     this.passwords.set(
       this.copyPasswords().filter((password) => {
-        return password.site.includes(search);
+        return password.site.toLowerCase().includes(search); // Convert site to lowercase for comparison
       }),
     );
   }
