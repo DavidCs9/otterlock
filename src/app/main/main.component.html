@@ -23,7 +23,10 @@
         <img src="../../../assets/loading_pwd.gif" alt="loading" class="h-20" />
       </div>
     } @else {
-      <app-passwords [passwords]="passwords()" />
+      <app-passwords
+        [passwords]="passwords()"
+        (selectedPassword)="openPasswordDetails($event)"
+      />
     }
   </div>
 </div>
@@ -32,5 +35,13 @@
   <app-add-password
     (closeDialog)="closeDialog()"
     (newPassword)="addOptimePassword($event)"
+  />
+</dialog>
+
+<dialog id="passwordDetailsDialog" class="w-80 rounded-2xl p-4">
+  <app-password-details
+    [password]="selectedPassword()"
+    (closeDialog)="closeDialog()"
+    (deletePassword)="deletePassword($event)"
   />
 </dialog>

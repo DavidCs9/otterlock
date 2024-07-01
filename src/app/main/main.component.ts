@@ -4,11 +4,12 @@ import { PasswordsComponent } from '../ui/passwords/passwords.component';
 import { Password } from '../interfaces/passwords.interface';
 import { lastValueFrom } from 'rxjs';
 import { AddPasswordComponent } from '../ui/add-password/add-password.component';
+import { PasswordDetailsComponent } from '../ui/password-details/password-details.component';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [PasswordsComponent, AddPasswordComponent],
+  imports: [PasswordsComponent, AddPasswordComponent, PasswordDetailsComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
@@ -17,6 +18,8 @@ export class MainComponent implements OnInit {
   passwords: WritableSignal<Password[]> = signal([]);
   copyPasswords: WritableSignal<Password[]> = signal([]);
   addPasswordDialog!: HTMLDialogElement;
+  passwordDetailsDialog!: HTMLDialogElement;
+  selectedPassword = signal(<Password>{});
 
   constructor(private passwordsService: PasswordsService) {}
 
@@ -24,6 +27,9 @@ export class MainComponent implements OnInit {
     this.loadingPasswords.set(true);
     this.getPasswords();
     this.addPasswordDialog = document.querySelector('#addPasswordDialog')!;
+    this.passwordDetailsDialog = document.querySelector(
+      '#passwordDetailsDialog',
+    )!;
   }
 
   async getPasswords() {
@@ -46,8 +52,10 @@ export class MainComponent implements OnInit {
     this.addPasswordDialog.showModal();
   }
 
-  deletePassword(id: string) {
-    console.log('delete password');
+  deletePassword(password: Password) {
+    this.passwords.set(
+      this.passwords().filter((p) => p.site !== password.site),
+    );
   }
 
   logout() {
@@ -56,9 +64,15 @@ export class MainComponent implements OnInit {
 
   closeDialog() {
     this.addPasswordDialog.close();
+    this.passwordDetailsDialog.close();
   }
 
   addOptimePassword(password: Password) {
     this.passwords.set([...this.passwords(), password]);
+  }
+
+  openPasswordDetails(password: Password) {
+    this.selectedPassword.set(password);
+    this.passwordDetailsDialog.showModal();
   }
 }
