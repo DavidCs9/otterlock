@@ -17,7 +17,7 @@
     placeholder="Search"
     (keyup)="search($event)"
   />
-  <div class="p- mt-2 h-96 rounded-lg bg-slate-200">
+  <div class="mt-2 h-96 rounded-lg bg-slate-200 p-2">
     @if (loadingPasswords()) {
       <div class="grid h-full place-items-center">
         <img src="../../../assets/loading_pwd.gif" alt="loading" class="h-20" />
@@ -29,5 +29,8 @@
 </div>
 
 <dialog id="addPasswordDialog" class="w-80 rounded-2xl p-4">
-  <app-add-password (closeDialog)="closeDialog()" />
+  <app-add-password
+    (closeDialog)="closeDialog()"
+    (newPassword)="addOptimePassword($event)"
+  />
 </dialog>

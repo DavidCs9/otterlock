@@ -14,14 +14,11 @@ import { AddPasswordComponent } from '../ui/add-password/add-password.component'
 })
 export class MainComponent implements OnInit {
   loadingPasswords = signal(false);
-  token = signal('');
   passwords: WritableSignal<Password[]> = signal([]);
   copyPasswords: WritableSignal<Password[]> = signal([]);
   addPasswordDialog!: HTMLDialogElement;
 
-  constructor(private passwordsService: PasswordsService) {
-    this.token.set(sessionStorage.getItem('token')!);
-  }
+  constructor(private passwordsService: PasswordsService) {}
 
   ngOnInit(): void {
     this.loadingPasswords.set(true);
@@ -30,9 +27,7 @@ export class MainComponent implements OnInit {
   }
 
   async getPasswords() {
-    const res = await lastValueFrom(
-      this.passwordsService.getPasswords(this.token()),
-    );
+    const res = await lastValueFrom(this.passwordsService.getPasswords());
     this.passwords.set(res);
     this.copyPasswords.set(res);
     this.loadingPasswords.set(false);
@@ -62,5 +57,9 @@ export class MainComponent implements OnInit {
 
   closeDialog() {
     this.addPasswordDialog.close();
+  }
+
+  addOptimePassword(password: Password) {
+    this.passwords.set([...this.passwords(), password]);
   }
 }

@@ -10,6 +10,7 @@ import { lastValueFrom } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
+import Toastify from 'toastify-js';
 
 @Component({
   selector: 'app-login',
@@ -41,16 +42,13 @@ export class LoginComponent {
       this.router.navigate(['/main']);
     } catch (error: any) {
       this.loadingLogin.set(false);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
+      Toastify({
         text: error.message,
-        toast: true,
-        position: 'bottom',
-        timer: 5000,
-        timerProgressBar: true,
-        showConfirmButton: false,
-      });
+        duration: 3000,
+        gravity: 'bottom',
+        position: 'center',
+        backgroundColor: 'linear-gradient(to right, #ff0000, #ff0000)',
+      }).showToast();
     }
   }
 
@@ -65,7 +63,7 @@ export class LoginComponent {
       window.sessionStorage.setItem('token', res.token);
     } catch (error: any) {
       if (error.error.error === 'Invalid credentials')
-        throw new Error('Credenciales inválidas');
+        throw new Error('Invalid credentials');
     }
   }
 }
