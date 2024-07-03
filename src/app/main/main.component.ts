@@ -58,6 +58,17 @@ export class MainComponent implements OnInit {
     );
   }
 
+  updatePassword(password: Password) {
+    this.passwords.set(
+      this.passwords().map((p) => {
+        if (p.site === password.site) {
+          return password;
+        }
+        return p;
+      }),
+    );
+  }
+
   logout() {
     console.log('logout');
   }

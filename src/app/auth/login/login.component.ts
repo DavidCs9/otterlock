@@ -7,8 +7,6 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { lastValueFrom } from 'rxjs';
-import Swal from 'sweetalert2';
-import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import Toastify from 'toastify-js';
 

@@ -15,6 +15,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { PasswordsService } from '../../services/passwords.service';
+import Toastify from 'toastify-js';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-password-details',
@@ -26,6 +28,7 @@ import { PasswordsService } from '../../services/passwords.service';
 export class PasswordDetailsComponent implements OnChanges, OnInit {
   @Input() password!: Password;
   @Output() closeDialog = new EventEmitter<void>();
+  @Output() updatePassword = new EventEmitter<Password>();
   @Output() deletePassword = new EventEmitter<Password>();
 
   passwordDetailsDialog!: HTMLDialogElement;
@@ -60,7 +63,33 @@ export class PasswordDetailsComponent implements OnChanges, OnInit {
     this.closeDialog.emit();
   }
 
-  handleUpdatePassword() {
-    console.log('update password');
+  async handleUpdatePassword() {
+    if (this.passwordDetailsForm.invalid) return;
+    this.loadingPassword.set(true);
+    await this.updatePasswordDB();
+    this.password = {
+      ...this.password,
+      site: this.passwordDetailsForm.value.site!,
+      encryptedPassword: this.passwordDetailsForm.value.password!,
+    };
+    this.updatePassword.emit(this.password);
+    this.loadingPassword.set(false);
+    Toastify({
+      text: 'Password updated successfully',
+      duration: 3000,
+      gravity: 'bottom',
+      position: 'center',
+      backgroundColor: 'linear-gradient(to right, #4caf50, #4caf50)',
+    }).showToast();
+    this.close();
+  }
+
+  async updatePasswordDB() {
+    await lastValueFrom(
+      this.passwordsService.updatePassword(this.password._id, {
+        site: this.passwordDetailsForm.value.site!,
+        encryptedPassword: this.passwordDetailsForm.value.password!,
+      }),
+    );
   }
 }

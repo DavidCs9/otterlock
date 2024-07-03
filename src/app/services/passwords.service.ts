@@ -13,6 +13,7 @@ import { lastValueFrom } from 'rxjs';
 export class PasswordsService {
   apiUrl = environment.apiUrl;
   token = signal('');
+
   constructor(private http: HttpClient) {
     this.token.set(sessionStorage.getItem('token')!);
   }
@@ -27,6 +28,22 @@ export class PasswordsService {
 
   addPassword(body: CreatePasswordBody) {
     return this.http.post<Password>(`${this.apiUrl}/passwords`, body, {
+      headers: {
+        Authorization: `Bearer ${this.token()}`,
+      },
+    });
+  }
+
+  updatePassword(id: string, body: CreatePasswordBody) {
+    return this.http.put<Password>(`${this.apiUrl}/passwords/${id}`, body, {
+      headers: {
+        Authorization: `Bearer ${this.token()}`,
+      },
+    });
+  }
+
+  deletePassword(id: string) {
+    return this.http.delete<Password>(`${this.apiUrl}/passwords/${id}`, {
       headers: {
         Authorization: `Bearer ${this.token()}`,
       },
