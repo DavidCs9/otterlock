@@ -33,10 +33,13 @@ export class PasswordDetailsComponent implements OnChanges, OnInit {
 
   passwordDetailsDialog!: HTMLDialogElement;
   loadingPassword = signal(false);
+  loadingDelete = signal(false);
   passwordDetailsForm = new FormGroup({
     site: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
   });
+  updatePasswordDialog!: HTMLDialogElement;
+  deleteDialog!: HTMLDialogElement;
 
   constructor(private passwordsService: PasswordsService) {}
 
@@ -44,6 +47,10 @@ export class PasswordDetailsComponent implements OnChanges, OnInit {
     this.passwordDetailsDialog = document.querySelector(
       '#passwordDetailsDialog',
     )!;
+    this.updatePasswordDialog = document.querySelector(
+      '#updatePasswordDialog',
+    )!;
+    this.deleteDialog = document.querySelector('#deletePasswordDialog')!;
   }
 
   ngOnChanges() {
@@ -63,8 +70,20 @@ export class PasswordDetailsComponent implements OnChanges, OnInit {
     this.closeDialog.emit();
   }
 
+  openUpdatePassword() {
+    if (this.passwordDetailsForm.invalid) {
+      this.passwordDetailsForm.markAllAsTouched();
+      return;
+    }
+    this.updatePasswordDialog.showModal();
+  }
+
+  closeUpdatePassword() {
+    this.updatePasswordDialog.close();
+  }
+
   async handleUpdatePassword() {
-    if (this.passwordDetailsForm.invalid) return;
+    this.updatePasswordDialog.close();
     this.loadingPassword.set(true);
     await this.updatePasswordDB();
     this.password = {
@@ -73,15 +92,17 @@ export class PasswordDetailsComponent implements OnChanges, OnInit {
       encryptedPassword: this.passwordDetailsForm.value.password!,
     };
     this.updatePassword.emit(this.password);
-    this.loadingPassword.set(false);
-    Toastify({
-      text: 'Password updated successfully',
-      duration: 3000,
-      gravity: 'bottom',
-      position: 'center',
-      backgroundColor: 'linear-gradient(to right, #4caf50, #4caf50)',
-    }).showToast();
-    this.close();
+    setTimeout(() => {
+      this.loadingPassword.set(false);
+      this.close();
+      Toastify({
+        text: 'Password updated successfully',
+        duration: 3000,
+        gravity: 'bottom',
+        position: 'center',
+        backgroundColor: 'linear-gradient(to right, #4caf50, #4caf50)',
+      }).showToast();
+    }, 3000);
   }
 
   async updatePasswordDB() {
@@ -90,6 +111,38 @@ export class PasswordDetailsComponent implements OnChanges, OnInit {
         site: this.passwordDetailsForm.value.site!,
         encryptedPassword: this.passwordDetailsForm.value.password!,
       }),
+    );
+  }
+
+  openDeleteDialog() {
+    this.deleteDialog.showModal();
+  }
+
+  closeDeleteDialog() {
+    this.deleteDialog.close();
+  }
+
+  async handleDeletePassword() {
+    this.deleteDialog.close();
+    this.loadingDelete.set(true);
+    await this.deletePasswordDB();
+    this.deletePassword.emit(this.password);
+    setTimeout(() => {
+      this.loadingDelete.set(false);
+      this.close();
+      Toastify({
+        text: 'Password deleted successfully',
+        duration: 3000,
+        gravity: 'bottom',
+        position: 'center',
+        backgroundColor: 'linear-gradient(to right, #f44336, #f44336)',
+      }).showToast();
+    }, 3000);
+  }
+
+  async deletePasswordDB() {
+    await lastValueFrom(
+      this.passwordsService.deletePassword(this.password._id),
     );
   }
 }
