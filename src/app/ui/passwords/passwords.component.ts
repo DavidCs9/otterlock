@@ -30,9 +30,9 @@ export class PasswordsComponent implements OnInit {
     )!;
   }
 
-  copyToClipboard(password: string) {
+  copyToClipboard(type: string, password: string) {
     Toastify({
-      text: 'Password copied to clipboard',
+      text: `${type} copied to clipboard`,
       duration: 3000,
       gravity: 'top',
       position: 'center',

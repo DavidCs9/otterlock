@@ -1,10 +1,17 @@
-import { Component, OnInit, WritableSignal, signal } from '@angular/core';
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  Component,
+  OnInit,
+  WritableSignal,
+  signal,
+} from '@angular/core';
 import { PasswordsService } from '../services/passwords.service';
 import { PasswordsComponent } from '../ui/passwords/passwords.component';
 import { Password } from '../interfaces/passwords.interface';
 import { lastValueFrom } from 'rxjs';
 import { AddPasswordComponent } from '../ui/add-password/add-password.component';
 import { PasswordDetailsComponent } from '../ui/password-details/password-details.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -12,6 +19,7 @@ import { PasswordDetailsComponent } from '../ui/password-details/password-detail
   imports: [PasswordsComponent, AddPasswordComponent, PasswordDetailsComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MainComponent implements OnInit {
   loadingPasswords = signal(false);
@@ -21,7 +29,10 @@ export class MainComponent implements OnInit {
   passwordDetailsDialog!: HTMLDialogElement;
   selectedPassword = signal(<Password>{});
 
-  constructor(private passwordsService: PasswordsService) {}
+  constructor(
+    private passwordsService: PasswordsService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.loadingPasswords.set(true);
@@ -70,7 +81,10 @@ export class MainComponent implements OnInit {
   }
 
   logout() {
-    console.log('logout');
+    setTimeout(() => {
+      sessionStorage.removeItem('token');
+      this.router.navigate(['/auth/login']);
+    }, 1000);
   }
 
   closeDialog() {

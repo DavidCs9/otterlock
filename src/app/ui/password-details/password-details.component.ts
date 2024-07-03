@@ -1,4 +1,5 @@
 import {
+  CUSTOM_ELEMENTS_SCHEMA,
   Component,
   EventEmitter,
   Input,
@@ -24,6 +25,7 @@ import { lastValueFrom } from 'rxjs';
   imports: [ReactiveFormsModule],
   templateUrl: './password-details.component.html',
   styleUrl: './password-details.component.css',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class PasswordDetailsComponent implements OnChanges, OnInit {
   @Input() password!: Password;

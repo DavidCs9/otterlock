@@ -1,22 +1,48 @@
-<div
+<div class="mb-4 flex w-full justify-end">
+  <button title="Logout" (click)="logout()">
+    <lord-icon
+      src="https://cdn.lordicon.com/gwvmctbb.json"
+      trigger="click"
+      colors="primary:#ffffff,secondary:#dfe2fe"
+      style="width: 50px; height: 50px"
+    >
+    </lord-icon>
+  </button>
+</div>
+<main
   class="mx-auto flex w-80 flex-col justify-center rounded-2xl bg-gray-50 p-4 md:w-96"
 >
-  <div class="flex justify-between p-1">
+  <div class="flex items-center justify-between p-1">
     <h1 class="font-semibold">List of passwords</h1>
     <button
-      class="flex items-center gap-1 rounded-lg border p-1 text-sm text-gray-500 hover:bg-slate-100"
+      title="Add password"
+      class="outline-none"
       (click)="openAddPassword()"
     >
-      <span class="icon-[material-symbols--add]"></span>
-      Add
+      <lord-icon
+        src="https://cdn.lordicon.com/zrkkrrpl.json"
+        trigger="click"
+        colors="primary:#121331,secondary:#8e98f5"
+        style="width: 35px; height: 35px"
+      >
+      </lord-icon>
     </button>
   </div>
-  <input
-    type="text"
-    class="w-full rounded-lg border p-1"
-    placeholder="Search"
-    (keyup)="search($event)"
-  />
+  <div class="mt-2 flex items-center gap-2 rounded-lg bg-slate-100 p-2">
+    <lord-icon
+      src="https://cdn.lordicon.com/unukghxb.json"
+      trigger="hover"
+      colors="primary:#121331,secondary:#8e98f5"
+      style="width: 25px; height: 25px"
+    >
+    </lord-icon>
+    <input
+      type="text"
+      placeholder="Search"
+      class="w-full border-none bg-transparent focus:outline-none"
+      (keyup)="search($event)"
+    />
+  </div>
   <div class="mt-2 h-96 rounded-lg bg-slate-200 p-2">
     @if (loadingPasswords()) {
       <div class="grid h-full place-items-center">
@@ -29,7 +55,29 @@
       />
     }
   </div>
-</div>
+</main>
+
+<footer class="flex w-full justify-center rounded">
+  <p class="mt-4 flex items-center gap-1 text-center text-sm text-gray-500">
+    Made with
+    <lord-icon
+      src="https://cdn.lordicon.com/jjoolpwc.json"
+      trigger="loop"
+      delay="2000"
+      colors="primary:#ffffff,secondary:#dfe2fe"
+      style="width: 30px; height: 30px"
+    >
+    </lord-icon>
+    by
+    <a
+      href="https://porfolio-astro-beta.vercel.app/"
+      class="text-blue-300"
+      target="_blank"
+      rel="noopener noreferrer"
+      >David
+    </a>
+  </p>
+</footer>
 
 <dialog id="addPasswordDialog" class="w-80 rounded-2xl p-4">
   <app-add-password
